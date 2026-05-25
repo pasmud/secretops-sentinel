@@ -1,6 +1,6 @@
 # SecretOps Sentinel - Status
 
-## Phase: Complete (pending GitHub push)
+## Phase: Complete
 
 ### Completed
 - Research phase done: Gitleaks, secret scanning practices, rotation workflows
@@ -23,7 +23,10 @@
 - Vite build: Production build succeeds
 
 ### Remaining
-- GitHub push (needs remote URL)
+- None — all done!
+
+### GitHub
+- Repo: https://github.com/pasmud/secretops-sentinel
 
 ### Build Status
 - `npm test`: 15/15 passed
