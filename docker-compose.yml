@@ -1,0 +1,12 @@
+services:
+  secretops-sentinel:
+    build: .
+    ports:
+      - "42001:42001"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PORT=42001
+      - DATABASE_URL=file:./data/dev.db
+      - NODE_ENV=production
+    restart: unless-stopped

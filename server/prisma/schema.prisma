@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model ScanRun {
+  id            String    @id @default(uuid())
+  repoPath      String
+  gitleaksUsed  Boolean
+  startedAt     DateTime  @default(now())
+  completedAt   DateTime?
+  status        String    @default("running")
+  totalFindings Int       @default(0)
+  errorMessage  String?
+  findings      Finding[]
+}
+
+model Finding {
+  id            String          @id @default(uuid())
+  scanRunId     String
+  scanRun       ScanRun         @relation(fields: [scanRunId], references: [id], onDelete: Cascade)
+  ruleId        String
+  secretType    String
+  filePath      String
+  lineNumber    Int
+  commitSHA     String
+  redactedMatch String
+  severity      String          @default("medium")
+  confidence    String          @default("medium")
+  authorName    String?
+  authorEmail   String?
+  date          DateTime?
+  workflowState String          @default("detected")
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  events        WorkflowEvent[]
+  allowlistSuggestion AllowlistSuggestion?
+  rotationChecklist    RotationChecklist?
+}
+
+model WorkflowEvent {
+  id        String   @id @default(uuid())
+  findingId String
+  finding   Finding  @relation(fields: [findingId], references: [id], onDelete: Cascade)
+  fromState String?
+  toState   String
+  note      String?
+  createdAt DateTime @default(now())
+}
+
+model AllowlistSuggestion {
+  id             String   @id @default(uuid())
+  findingId      String   @unique
+  finding        Finding  @relation(fields: [findingId], references: [id], onDelete: Cascade)
+  ruleId         String
+  matchValue     String
+  suggestionType String
+  allowlistValue String
+  rationale      String
+  accepted       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+}
+
+model RotationChecklist {
+  id          String   @id @default(uuid())
+  findingId   String   @unique
+  finding     Finding  @relation(fields: [findingId], references: [id], onDelete: Cascade)
+  secretType  String
+  steps       String
+  completed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  completedAt DateTime?
+}

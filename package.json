@@ -1,0 +1,21 @@
+{
+  "name": "secretops-sentinel",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "build": "npm run build --prefix server && npm run build --prefix client",
+    "test": "npm run test --prefix server",
+    "test:e2e": "npm run test:e2e --prefix client",
+    "lint": "npm run lint --prefix server && npm run lint --prefix client",
+    "typecheck": "npm run typecheck --prefix server && npm run typecheck --prefix client",
+    "db:migrate": "npm run db:migrate --prefix server",
+    "db:push": "npm run db:push --prefix server",
+    "setup": "npm install && npm run db:push && npm run db:migrate"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
